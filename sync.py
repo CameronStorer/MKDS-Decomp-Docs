@@ -28,7 +28,9 @@ DOCUMENTS = [
     ('analysis/CODEX_NPC_MAP.md', 'NPC and traffic animation', 'Research'),
     ('docs/CODEX_NSBCA_HANDOFF.md', 'Joint-animation decoder', 'Animation'),
     ('docs/CODEX_NSBTP_HANDOFF.md', 'Face-pattern decoder', 'Animation'),
-    ('docs/CODEX_ROM_BUILD_WORKFLOW.md', 'Future ROM workflow', 'Project notes'),
+    ('docs/CODEX_ROM_BUILD_WORKFLOW.md', 'ROM build workflow', 'Project notes'),
+    ('docs/RUST_PROJECT_COMPARISON.md', 'Rust project comparison', 'Project notes'),
+    ('docs/NATIVE_BUILD_BASELINE_AND_CONTRACT.md', 'Native build baseline', 'Project notes'),
 ]
 
 

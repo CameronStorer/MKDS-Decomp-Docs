@@ -1,11 +1,11 @@
 {
-  "updated": "2026-10-10 18:53 UTC",
+  "updated": "2026-10-14 18:57 UTC",
   "documents": [
     {
       "path": "PROGRESS.md",
       "title": "Shared progress",
       "group": "Progress",
-      "modified": "2026-10-10"
+      "modified": "2026-10-14"
     },
     {
       "path": "docs/NEXT_GOALS.md",
@@ -117,9 +117,21 @@
     },
     {
       "path": "docs/CODEX_ROM_BUILD_WORKFLOW.md",
-      "title": "Future ROM workflow",
+      "title": "ROM build workflow",
       "group": "Project notes",
-      "modified": "2026-10-10"
+      "modified": "2026-10-14"
+    },
+    {
+      "path": "docs/RUST_PROJECT_COMPARISON.md",
+      "title": "Rust project comparison",
+      "group": "Project notes",
+      "modified": "2026-10-14"
+    },
+    {
+      "path": "docs/NATIVE_BUILD_BASELINE_AND_CONTRACT.md",
+      "title": "Native build baseline",
+      "group": "Project notes",
+      "modified": "2026-10-14"
     }
   ]
 }

@@ -5,6 +5,20 @@ their own ROM locally. This describes engineering boundaries, not legal clearanc
 
 ## Existing foundation
 
+### Recompiler status (2026-10-10)
+
+`rom_builder/` is currently a ROM validator, TUI, and staging launcher; its `--build` action still
+compiles the frozen `game/` reference port. It is not yet the promised ROM-to-game recompiler.
+`recomp/build.rs` is a separate spike that lifts a capped ARM subset from metadata-selected ARM9
+main/autoload/overlay images and is not yet linked into a runnable game. User ROM loading exposes decompressed ARM9
+main/autoload sections and expanded ARM9 overlays through
+`mkds_builder::extract::{arm9_sections, arm9_overlays}`, plus zero-copy NitroFS access through
+`rom::NitroFs`. The build script consumes section/overlay images by exact segment identity and
+checks boundaries against each selected guest image. The remaining integration is to compile
+generated Rust into the game runtime and boot through replacement DS services. Current spike
+validation still accepts AMCE revision 0 only; other regions/revisions need their own address
+metadata before they can be safely lifted.
+
 ### Rust builder (rom_builder/, 2026-10-10)
 
 `rom_builder/` (crate `mkds_builder`) is the Rust port of `tools/rom_builder.py` with a ratatui TUI.
@@ -110,3 +124,17 @@ Claude's current semantic catalog is `docs/FUNCTION_MAP.md`; the animation
 supplement is `analysis/CODEX_ANIMATION_MAP.md`. The former is generated from
 source comments and `docs/function_notes.md` and currently targets plan0. A
 future catalog migration should reconcile segment identities against plan2.
+
+### Native build flow (2026-10-14, current implementation)
+`mkds_builder <your.nds> --build --out <empty dir>` generates Rust from your ROM (`mkds_gen`), links it to the native
+host (`recomp/native`), compiles it with locked dependencies and stages `game`, `play`, `manifest.json`,
+`generation.json` and `coverage.csv`. `--run` also launches it; extra runtime options go after `play`
+(`--headless --instructions N`, `--frames N`, `--mute`, `--capture DIR`, `--input-script CSV`). Incomplete coverage
+fails the build unless `--allow-incomplete`; `--keep-generated` keeps the generated source. The frozen hand-written port is
+only built by `--reference-port`. First builds take ~15 minutes.
+
+The generated full-table runtime has completed an input-driven three-lap race and reached first-place results in a headless
+acceptance run. That verifies the generated game code and runtime path, but does not establish smooth windowed playback.
+The latest packaged windowed measurement recorded about 20 fps in menus and 31 fps in a race at roughly half real-time,
+with severe audio underruns. A fresh packaged build using the latest core changes and improved render scheduling still needs
+acceptance. See the [native build baseline and contract](NATIVE_BUILD_BASELINE_AND_CONTRACT.md) for test evidence and open limits.

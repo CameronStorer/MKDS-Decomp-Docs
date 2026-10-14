@@ -1,6 +1,38 @@
 # Progress (central status file)
 
-- Codex continuation (2026-10-10): child emitter simulation matches all 17 controlled original snapshots and the native wheel renderer now traverses child lists; existing wheel resources contain no child records, and full child visual parity awaits a child-bearing native emitter. Sound now handles slides, ties, bend/pan and modulation; remote wall/charge/mini-turbo and CPU damage reaction cues use camera-relative positioning. Full core (258 passed, one ignored) and sound-filter (14 passed) runs passed before remote cue wiring; latest audio changes passed `cargo check` and `cargo build`. Hardware playback parity remains open. Logs: `docs/CODEX_CHILD_PARTICLE_WORK_LOG.md`, `docs/CODEX_SOUND_WORK_LOG.md`.
+- Runtime user-play follow-up T116 (2026-10-14): fixed duplicate sound-unit
+  advancement, selection-screen lighting, texture transforms, affine/bitmap
+  sprites, priority, window masks and blending. 119 core tests pass. Exact GX
+  replay restores coloured Mario; fresh race capture shows a star item and all
+  eight ranking portraits. Agent 1 owns T115 host pacing/audio buffering and the
+  fresh packaged-build check. Windowed quality and ranking-animation acceptance
+  remain open; see `docs/CODEX_RUNTIME_WORK_LOG.md`.
+
+- Runtime lane T112 (2026-10-14): the supplied NDS now completes a three-lap
+  first-place race and displays results through the full 11,298-function generated
+  Rust table, with verified overlay residency and native display/input/audio.
+  Fixed GX relative-vertex scaling; verified controls, pause/resume and normal
+  window close. 111 core tests, 3 host tests and the explicit Windows event test
+  pass. Builder launcher adoption/staged-bundle acceptance remains Agent 1's work.
+  Evidence and limits: `docs/CODEX_RUNTIME_WORK_LOG.md`.
+
+- Owner direction (2026-10-10): hand-port development is frozen; all new work
+  targets user-ROM recompilation. Codex-audit released T052 and completed T067:
+  dependency-free Rust address-only metadata exporter, four tests passing,
+  11,175 function boundaries across five images; 43 replay-backed original
+  layout/function/global facts appended to private `docs/MAPPING.csv`.
+  Handoff: `docs/CODEX_AUDIT_RECOMP_MAPPING.md`. Full native ROM recompilation
+  remains in progress; this exporter supplies metadata to the builder lane.
+
+- Codex T059 ROM-loader milestone (2026-10-10): Rust now expands the user's ARM9 image into
+  SDK-declared main/autoload sections, parses ARM9 overlays through the ROM FAT, and resolves
+  NitroFS paths to borrowed file data. Section labels and image sizes match the independent
+  `tools/nds_extract.py` output for the local ROM; all 8 builder library tests and 2 binary tests
+  pass. Shared names are in `docs/RECOMP_GLOSSARY.md` and append-only `docs/MAPPING.csv`. The
+  `rom_builder` UI still builds the frozen reference port, and codegen has not consumed overlays.
+  Work log: `docs/CODEX_ROM_LOADER_WORK_LOG.md`.
+
+- Pre-freeze reference-port milestones (2026-10-10): child emitter simulation matches 17 controlled original snapshots; sound sequencing and selected spatial cues were ported and validated in the reference implementation. This work remains test-oracle history under the current recompiler-only direction. Logs: `docs/CODEX_CHILD_PARTICLE_WORK_LOG.md`, `docs/CODEX_SOUND_WORK_LOG.md`.
 
 One place to see where the port stands. Team memo: `docs/TEAM_MEMO.md`. Agents: start with `docs/AGENTS.md` and
 `python tools/coord.py start <name>`; the live task board is `docs/TASKS.md`, the running log
