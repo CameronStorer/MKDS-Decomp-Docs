@@ -89,17 +89,3 @@ This repository contains research documentation, site tooling, and two small
 asset archives, extracted code binaries, decompiled source exports, save states and IDA
 databases are not included. No copyright license for third-party material is
 implied. This independent project is not affiliated with Nintendo.
-
-## Shared hostname
-
-GitHub Pages is configured to inherit `docs.cameronstorer.com` from the account's
-user site. This Cloudflare record is already configured:
-
-| Type | Name | Target | Proxy | TTL |
-| --- | --- | --- | --- | --- |
-| CNAME | `docs` | `cameronstorer.github.io` | DNS only | Automatic |
-
-Other GitHub Pages project repositories under this account can use
-`docs.cameronstorer.com/<repository>/` without separate DNS records, provided
-they inherit the user site's domain. Enable Pages and deployment for each new
-repository. The main website's DNS is unchanged.
