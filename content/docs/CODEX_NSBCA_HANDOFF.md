@@ -3,17 +3,17 @@
 Implemented and integrated 2026-10-08. The running game now samples detailed
 driver joint poses before SBC hierarchy and skinning. The decoder remains
 engine-independent; `nitro_driver.rs` controls presentation and
-`game/src/driver_animation.rs` updates the renderer.
+`3_hand_port/game/src/driver_animation.rs` updates the renderer.
 
 ## Files
 
-- `vm_model/src/nitro_anim.rs`: parser, fixed-point channels, local-pose sampling.
-- `vm_model/src/lib.rs`: one module export (`pub mod nitro_anim;`).
-- `vm_model/tests/nitro_anim.rs`: local asset corpus and truncation checks.
-- `vm_model/examples/animation_info.rs`: inspect animations and sampled matrices.
-- `vm_model/examples/compare_animation_capture.rs`: compare live SDK captures.
-- `tools/bizhawk/codex_anim/`: isolated capture runner and fixture generator.
-- `vm_model/tests/data/animation_runtime.csv`: original SDK regression evidence.
+- `3_hand_port/vm_model/src/nitro_anim.rs`: parser, fixed-point channels, local-pose sampling.
+- `3_hand_port/vm_model/src/lib.rs`: one module export (`pub mod nitro_anim;`).
+- `3_hand_port/vm_model/tests/nitro_anim.rs`: local asset corpus and truncation checks.
+- `3_hand_port/vm_model/examples/animation_info.rs`: inspect animations and sampled matrices.
+- `3_hand_port/vm_model/examples/compare_animation_capture.rs`: compare live SDK captures.
+- `5_tools/bizhawk/codex_anim/`: isolated capture runner and fixture generator.
+- `3_hand_port/vm_model/tests/data/animation_runtime.csv`: original SDK regression evidence.
 
 ## API
 
@@ -71,7 +71,7 @@ centered drive pose because the current recording does not expose steering.
 
 ## Evidence and limits
 
-- All 115 NSBCA files in `gamefile_assets/unpacked` parsed and sampled at every
+- All 115 NSBCA files in `6_data/gamefile_assets/unpacked` parsed and sampled at every
   integer frame and half frame: 19,070 complete poses, without errors.
 - Mario's 29-frame drive animation has 7 tracks and produces changing poses.
 - Every truncated prefix of Mario's drive file is rejected.
@@ -116,11 +116,11 @@ SDK routines and this ROM's exports to resolve them. Local routine references:
 ## Commands (from the project root)
 
 ```powershell
-cargo test --manifest-path vm_model/Cargo.toml
-cargo run --manifest-path vm_model/Cargo.toml --example animation_info -- gamefile_assets/unpacked/data/KartModelSub/character/mario/P_MR_drive.nsbca 0
-& tools/bizhawk/codex_anim/run.ps1
-cargo run --manifest-path vm_model/Cargo.toml --example compare_animation_capture -- tools/bizhawk/codex_anim
-python tools/bizhawk/codex_anim/make_fixture.py
+cargo test --manifest-path 3_hand_port/vm_model/Cargo.toml
+cargo run --manifest-path 3_hand_port/vm_model/Cargo.toml --example animation_info -- 6_data/gamefile_assets/unpacked/data/KartModelSub/character/mario/P_MR_drive.nsbca 0
+& 5_tools/bizhawk/codex_anim/run.ps1
+cargo run --manifest-path 3_hand_port/vm_model/Cargo.toml --example compare_animation_capture -- 5_tools/bizhawk/codex_anim
+python 5_tools/bizhawk/codex_anim/make_fixture.py
 ```
 
 Codex used `--target-dir "$env:TEMP/codex-mkds-nsbca-target"` to avoid competing

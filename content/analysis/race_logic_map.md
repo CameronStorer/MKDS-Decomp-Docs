@@ -1,4 +1,4 @@
-# Race logic map (Mario Kart DS, AMCE): input-anchored findings
+# Race logic map (MKDS, AMCE): input-anchored findings
 
 Addresses are real RAM addresses from the clean IDA load (`tools/nds_extract.py` +
 `tools/ida_load_nds.py` + `tools/ida_fix_thumb_switches.py`). Location keys use the notation of

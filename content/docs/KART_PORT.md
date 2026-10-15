@@ -9,11 +9,11 @@ recorded button presses**. In this picture it sits exactly on the game's path fo
 including the 200-unit climb (bottom panel), up to the first slipstream. With slipstreams and
 bumps and items now ported, the whole recording (2,751 frames, through a lightning strike) and a
 second two-lap items session (5,639 frames) replay exactly.
-Regenerate with `cargo run --example trace_session` + `tools/plot_trace.py`.*
+Regenerate with `cargo run --example trace_session` + `5_tools/plot_trace.py`.*
 
 ## What exists now
 
-`vm_model` (Rust crate) contains a clean-room, fixed-point re-implementation of a Mario Kart DS
+`vm_model` (Rust crate) contains a clean-room, fixed-point re-implementation of a MKDS
 kart, verified frame by frame against the real game:
 
 | Module | What it does |
@@ -46,8 +46,8 @@ Everything is integer arithmetic, so a run depends only on inputs + course data 
 
 ## How it was verified
 
-1. **Static analysis:** IDA exports, plus `tools/arm_disasm.py` (Capstone) where IDA split or mis-decoded ARM code as Thumb.
-2. **Runtime evidence:** BizHawk (melonDS core) Lua tools in `tools/bizhawk/`.
+1. **Static analysis:** IDA exports, plus `5_tools/arm_disasm.py` (Capstone) where IDA split or mis-decoded ARM code as Thumb.
+2. **Runtime evidence:** BizHawk (melonDS core) Lua tools in `5_tools/bizhawk/`.
    - `autodrive.lua` drives the game unattended: scripted inputs, a closed-loop wait on a kart field, an autopilot along the course's CPU line, savestates, and screenshots.
    - It also has a write-watch mode that records which instruction writes a field.
    - `kart_logger_lib.lua` logs the full kart struct every frame.
@@ -132,8 +132,8 @@ cd vm_model
 cargo test --features bevy           # all tests; ROM/asset tests skip if files are missing
 MKDS_ROM=path/to/game.nds cargo test # point at a ROM elsewhere
 cargo run --example trace_session -- tests/data/kart_figure8_session.csv \
-    ../gamefile_assets/unpacked/data/Course/cross_course/course_collision.kcl > trace.csv
-python ../tools/plot_trace.py <kcl> trace.csv ../docs/figure8_simulation.png
+    ../6_data/gamefile_assets/unpacked/data/Course/cross_course/course_collision.kcl > trace.csv
+python ../5_tools/plot_trace.py <kcl> trace.csv ../4_docs/figure8_simulation.png
 ```
 
-Detailed field-by-field notes are in `analysis/race_logic_map.md`.
+Detailed field-by-field notes are in `6_data/analysis/race_logic_map.md`.

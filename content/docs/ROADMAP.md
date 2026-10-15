@@ -1,6 +1,6 @@
 # Roadmap to a complete game
 
-Clean-room Rust/Bevy re-implementation of Mario Kart DS. Every gameplay system is ported from the
+Clean-room Rust/Bevy re-implementation of MKDS. Every gameplay system is ported from the
 decompiled code and verified **frame-exact** against BizHawk recordings before it is called done.
 Assets are read from the user's own ROM at run time; nothing is embedded.
 
@@ -43,8 +43,8 @@ Speed, steering, drift, mini-turbo, slopes, walls, KCL collision, slipstream, ka
 🔶 Stats for every character and kart built like the game (`roster.rs`; Mario's B Dasher equals the live stats). All characters/karts (stats from `kartphysicalparam.bin` + character table), all 32 courses
 (collision + course objects), engine classes (50/100/150cc), mirror.
 
-## Playable build (`game/`) ✅
-`cargo run --release` in `game/` (or `play.bat`): a random course from the user's ROM with its
+## Playable build (`3_hand_port/game/`) ✅
+`cargo run --release` in `3_hand_port/game/` (or `play.bat`): a random course from the user's ROM with its
 real models and textures (NSBMD/NSBTX loader `nitro.rs`), Mario on his kart, course objects,
 the course's own music (SSEQ/SBNK/SWAR synth `sound.rs`; tempo and pitch verified against a
 BizHawk audio dump; course → sequence table from the game at `0x0215316C`), countdown, laps,
@@ -59,11 +59,11 @@ Title, menus, character/kart/cup select, Grand Prix scoring, Time Trial (+ ghost
 Missions, save data, settings, packaging.
 
 ## How each step is verified
-1. Read the routine (IDA exports, `tools/arm_disasm.py`).
-2. Record a session with `tools/bizhawk/autodrive.lua` (scripted, unthrottled, deterministic).
+1. Read the routine (IDA exports, `5_tools/arm_disasm.py`).
+2. Record a session with `5_tools/bizhawk/autodrive.lua` (scripted, unthrottled, deterministic).
 3. Turn the log into a fixture; the test replays inputs only and requires exact equality.
 
 ## Status (2026-10-08)
 
 Playable: Grand Prix, single races, Time Trial with ghosts, Balloon Battle (approximate rules).
-All 32 race courses complete under autopilot. See `docs/NEXT_GOALS.md` for what comes next.
+All 32 race courses complete under autopilot. See `4_docs/NEXT_GOALS.md` for what comes next.

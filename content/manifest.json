@@ -1,29 +1,41 @@
 {
-  "updated": "2026-10-14 18:57 UTC",
+  "updated": "2026-10-15 18:57 UTC",
   "documents": [
     {
-      "path": "PROGRESS.md",
-      "title": "Shared progress",
-      "group": "Progress",
-      "modified": "2026-10-14"
+      "path": "docs/NATIVE_BUILD_STATUS.md",
+      "title": "Native build status",
+      "group": "Start here",
+      "modified": "2026-10-15"
     },
     {
-      "path": "docs/NEXT_GOALS.md",
-      "title": "Current progress",
-      "group": "Progress",
-      "modified": "2026-10-10"
+      "path": "docs/OBJECTIVES_OWNER_PLAN.md",
+      "title": "Goals and roadmap",
+      "group": "Start here",
+      "modified": "2026-10-15"
     },
     {
-      "path": "docs/ROADMAP.md",
-      "title": "Roadmap",
-      "group": "Progress",
-      "modified": "2026-10-08"
+      "path": "docs/NATIVE_BUILD_BASELINE_AND_CONTRACT.md",
+      "title": "Build history and measurements",
+      "group": "Native build",
+      "modified": "2026-10-15"
     },
     {
-      "path": "docs/KART_PORT.md",
-      "title": "Kart port findings",
-      "group": "Progress",
-      "modified": "2026-10-08"
+      "path": "docs/ASSET_LAYOUT.md",
+      "title": "Asset layout",
+      "group": "Native build",
+      "modified": "2026-10-15"
+    },
+    {
+      "path": "docs/GENERATOR_CONTRACT.md",
+      "title": "Code generator",
+      "group": "Native build",
+      "modified": "2026-10-15"
+    },
+    {
+      "path": "docs/RUNTIME_CONTRACT.md",
+      "title": "Runtime",
+      "group": "Native build",
+      "modified": "2026-10-15"
     },
     {
       "path": "docs/FUNCTION_MAP.md",
@@ -81,19 +93,13 @@
     },
     {
       "path": "analysis/CODEX_ANIMATION_MAP.md",
-      "title": "Original animation logic",
-      "group": "Animation",
+      "title": "Animation logic",
+      "group": "Research",
       "modified": "2026-10-08"
     },
     {
       "path": "analysis/CODEX_PARTICLE_MAP.md",
       "title": "Particles and fall contacts",
-      "group": "Research",
-      "modified": "2026-10-10"
-    },
-    {
-      "path": "docs/CODEX_RAINBOW_WORK_LOG.md",
-      "title": "Rainbow Road movement fidelity",
       "group": "Research",
       "modified": "2026-10-10"
     },
@@ -106,32 +112,56 @@
     {
       "path": "docs/CODEX_NSBCA_HANDOFF.md",
       "title": "Joint-animation decoder",
-      "group": "Animation",
-      "modified": "2026-10-08"
+      "group": "Research",
+      "modified": "2026-10-15"
     },
     {
       "path": "docs/CODEX_NSBTP_HANDOFF.md",
       "title": "Face-pattern decoder",
-      "group": "Animation",
-      "modified": "2026-10-08"
+      "group": "Research",
+      "modified": "2026-10-15"
+    },
+    {
+      "path": "PROGRESS.md",
+      "title": "Shared progress (hand port)",
+      "group": "Hand-port archive",
+      "modified": "2026-10-15"
+    },
+    {
+      "path": "docs/NEXT_GOALS.md",
+      "title": "Hand-port goals",
+      "group": "Hand-port archive",
+      "modified": "2026-10-15"
+    },
+    {
+      "path": "docs/ROADMAP.md",
+      "title": "Hand-port roadmap",
+      "group": "Hand-port archive",
+      "modified": "2026-10-15"
+    },
+    {
+      "path": "docs/KART_PORT.md",
+      "title": "Kart port findings",
+      "group": "Hand-port archive",
+      "modified": "2026-10-15"
+    },
+    {
+      "path": "docs/CODEX_RAINBOW_WORK_LOG.md",
+      "title": "Rainbow Road movement fidelity",
+      "group": "Hand-port archive",
+      "modified": "2026-10-10"
     },
     {
       "path": "docs/CODEX_ROM_BUILD_WORKFLOW.md",
-      "title": "ROM build workflow",
-      "group": "Project notes",
-      "modified": "2026-10-14"
+      "title": "Early ROM build workflow",
+      "group": "Hand-port archive",
+      "modified": "2026-10-15"
     },
     {
       "path": "docs/RUST_PROJECT_COMPARISON.md",
       "title": "Rust project comparison",
-      "group": "Project notes",
-      "modified": "2026-10-14"
-    },
-    {
-      "path": "docs/NATIVE_BUILD_BASELINE_AND_CONTRACT.md",
-      "title": "Native build baseline",
-      "group": "Project notes",
-      "modified": "2026-10-14"
+      "group": "Hand-port archive",
+      "modified": "2026-10-15"
     }
   ]
 }

@@ -157,3 +157,8 @@ dialog::backdrop { background: #092751a6; }
   .stat strong { font-size: 24px; }
   .prose h2, .prose h3 { scroll-margin-top: 101px; }
 }
+
+/* collapsible sidebar groups */
+.nav-group{margin:0}.nav-group>summary.nav-label{cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;margin:20px 10px 6px}
+.nav-group>summary.nav-label::-webkit-details-marker{display:none}.nav-group>summary.nav-label::after{content:"+";font-size:13px}
+.nav-group[open]>summary.nav-label::after{content:"2"}

@@ -23,28 +23,32 @@ def frame(title, body, active=''):
                 for name in ('style.css', 'theme.css', 'site.js')}
     manifest = json.loads((ROOT / 'content/manifest.json').read_text(encoding='utf-8'))
     links = []
-    for group in ('Progress', 'Function maps', 'Research', 'Animation', 'Project notes'):
+    # Collapsible groups: the first two are open; a group also opens when it holds the current page.
+    for group, open_default in (('Start here', True), ('Native build', True), ('Function maps', False),
+                                ('Research', False), ('Hand-port archive', False)):
         entries = [p for p in manifest['documents'] if p['group'] == group]
         if not entries:
             continue
-        links.append(f'<div class="nav-label">{group}</div>')
+        is_open = open_default or any(active == p['path'] for p in entries)
+        links.append(f'<details class="nav-group"{" open" if is_open else ""}><summary class="nav-label">{group}</summary>')
         for p in entries:
             selected = ' class="selected" aria-current="page"' if active == p['path'] else ''
             links.append(f'<a href="{slug(p["path"])}"{selected}>{html.escape(p["title"])}</a>')
+        links.append('</details>')
     return f'''<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>{html.escape(title)} · MKDS Research</title><meta name="description" content="A public research log of Mario Kart DS decompilation and its native Windows Rust port.">
+<title>{html.escape(title)} · MKDS Research</title><meta name="description" content="A public research log of MKDS decompilation and its native Windows Rust build.">
 <link rel="icon" type="image/png" href="assets/mkds-icon.png">
 <link rel="stylesheet" href="assets/style.css?v={versions['style.css']}"><link rel="stylesheet" href="assets/theme.css?v={versions['theme.css']}"><script src="assets/site.js?v={versions['site.js']}" defer></script></head>
 <body><a class="skip" href="#main">Skip to content</a>
-<header><a class="brand" href="index.html"><img class="brand-icon" src="assets/mkds-icon.png" width="48" height="48" alt=""><span class="brand-name">MARIO KART <span class="ds">DS</span><b>DECOMPILATION RESEARCH</b></span></a>
+<header><a class="brand" href="index.html"><img class="brand-icon" src="assets/mkds-icon.png" width="48" height="48" alt=""><span class="brand-name">MK<span class="ds">DS</span><b>DECOMPILATION RESEARCH</b></span></a>
 <nav aria-label="Primary"><a href="index.html">Overview</a><a href="functions.html">Function explorer</a>
-<a href="https://github.com/CameronStorer/mkds-decomp-docs">GitHub ↗</a></nav>
+<a href="https://github.com/CameronStorer/mkds-native-builder">Build it yourself ↗</a><a href="https://github.com/CameronStorer/mkds-decomp-docs">GitHub ↗</a></nav>
 <button id="menu-toggle" aria-label="Toggle documentation navigation" aria-expanded="false">☰</button></header>
 <div class="layout"><aside id="sidebar"><a class="explorer-link" href="functions.html">⌕ Explore functions</a>{''.join(links)}
 <div class="snapshot">Documentation snapshot<br><strong>{html.escape(manifest['updated'])}</strong></div></aside>
 <main id="main">{body}<footer>Independent research by Cameron Storer. Documentation of a work in progress.
-<br>Not affiliated with Nintendo. Mario Kart DS and associated names belong to their respective owners.
+<br>Not affiliated with Nintendo. MKDS and associated names belong to their respective owners.
 <br>Title-screen checkerboard and Mario icon decoded from the original game. <a href="https://github.com/CameronStorer/mkds-decomp-docs/blob/main/assets/ATTRIBUTION.md">Visual asset sources</a>.</footer></main></div></body></html>'''
 
 
@@ -99,19 +103,21 @@ def build():
     counts = Counter(p['status'] for p in functions)
     counts['annotated'] = counts['known'] + counts['described']
     cards = ''.join(f'<div class="stat"><strong>{counts[s]:,}</strong><span>{label}</span></div>' for s, label in [('annotated', 'Recorded meanings'), ('inferred', 'Inferred areas'), ('sdk', 'SDK classifications'), ('unknown', 'Still unknown')])
-    overview = f'''<section class="title-screen" aria-label="Mario Kart DS research"><div class="title-screen-copy"><div class="eyebrow">Mario Kart DS / Native Windows port</div>
-<h1>Understand the original.<br><span class="muted">Rebuild its behavior.</span></h1>
-<p class="lead">An open research log documenting Mario Kart DS routines, fixed-point gameplay logic, and a faithful native Rust implementation.</p>
-<div class="hero-actions"><a class="button" href="functions.html">Explore {len(functions):,} functions →</a><a class="text-link" href="{slug('docs/NEXT_GOALS.md')}">Current progress ↗</a></div></div><img class="title-screen-icon" src="assets/mkds-icon.png" width="96" height="96" alt=""></section>
+    overview = f'''<section class="title-screen" aria-label="MKDS research"><div class="title-screen-copy"><div class="eyebrow">MKDS / Native Windows build</div>
+<h1>Understand the original.<br><span class="muted">Build it natively.</span></h1>
+<p class="lead">An open research log: mapping the game's code, and turning a player's own ROM into a native Rust program with one command. No game data is published here.</p>
+<div class="hero-actions"><a class="button" href="{slug('docs/NATIVE_BUILD_STATUS.md')}">Native build status →</a><a class="text-link" href="https://github.com/CameronStorer/mkds-native-builder">Build it yourself ↗</a><a class="text-link" href="functions.html">Explore {len(functions):,} functions →</a></div></div><img class="title-screen-icon" src="assets/mkds-icon.png" width="96" height="96" alt=""></section>
 <section class="stats" aria-label="Function classification counts">{cards}</section>
 <p class="caption">Function classifications from the current export inventory. These are documentation counts, not a percentage of game completion. Recorded meanings include {counts['known']:,} reviewed annotations and {counts['described']:,} unverified sweep descriptions. Inferred and SDK labels also require review.</p>
-<section class="section"><div class="section-heading"><span class="eyebrow">The project</span><h2>From evidence to a playable port</h2></div>
-<div class="feature-grid"><a class="feature" href="{slug('docs/ROADMAP.md')}"><span class="feature-number">01 / PROGRESS</span><h3>Game systems & roadmap</h3><p>Kart physics, items, race flow, CPU drivers, rendering, audio and the remaining work.</p><span>Read the roadmap →</span></a>
-<a class="feature" href="{slug('docs/FUNCTION_MAP.md')}"><span class="feature-number">02 / CODE MAPPING</span><h3>What each routine means</h3><p>Address-based correlations, field layouts and connections to the Rust implementation.</p><span>Browse identified functions →</span></a>
-<a class="feature" href="{slug('analysis/race_logic_map.md')}"><span class="feature-number">03 / ORIGINAL BEHAVIOR</span><h3>Follow the game logic</h3><p>Input paths, race state, structure offsets and discoveries supported by exported C and ARM instructions.</p><span>Read the research →</span></a>
-<a class="feature" href="{slug('docs/RUST_PROJECT_COMPARISON.md')}"><span class="feature-number">04 / TWO RUST ROUTES</span><h3>Compare the Rust projects</h3><p>See how the hand-written PC port differs from Rust generated from a user-provided ROM.</p><span>Read the comparison →</span></a></div></section>
-<section class="method"><div><span class="eyebrow">Verification matters</span><h2>A mapping is a claim.<br>A replay is evidence.</h2></div><p>Read the exported routine, recover missing assembly behavior, capture the original game in BizHawk, then compare the Rust model. Coverage is reported per routine and recording. Parser tests and inferred labels are kept distinct from runtime verification.</p></section>
-<section class="section"><span class="eyebrow">Latest animation work</span><h2>Driver poses, expressions & playback</h2><p>Joint and texture-pattern decoders plus the original animation clock are available. Their captured cases match the original; visible renderer integration and broader runtime coverage remain pending.</p><a class="text-link" href="{slug('analysis/CODEX_ANIMATION_MAP.md')}">See source mappings and verification limits →</a></section>
+<section class="section"><div class="section-heading"><span class="eyebrow">Latest</span><h2>Block 1 complete: no interpreter in the shipped game</h2></div>
+<p>From a user's own ROM, one command unpacks the game files, translates all 11,297 listed ARM9 functions and the ARM7 program into Rust, and compiles a native program. A full race to the results screen ran 1.67 billion ARM9 instructions with none interpreted; two fresh builds produced identical source.</p>
+<a class="text-link" href="{slug('docs/NATIVE_BUILD_STATUS.md')}">Read the status and measurements →</a></section>
+<section class="section"><div class="section-heading"><span class="eyebrow">The project</span><h2>From evidence to a native build</h2></div>
+<div class="feature-grid"><a class="feature" href="{slug('docs/NATIVE_BUILD_STATUS.md')}"><span class="feature-number">01 / NATIVE BUILD</span><h3>Status and results</h3><p>What the one-command build does, what was measured, and the honest limits.</p><span>Read the status →</span></a>
+<a class="feature" href="{slug('docs/GENERATOR_CONTRACT.md')}"><span class="feature-number">02 / HOW IT WORKS</span><h3>Machine code to Rust</h3><p>Function discovery, ARM/Thumb lifting, overlays and how coverage is reported.</p><span>Read about the generator →</span></a>
+<a class="feature" href="{slug('docs/FUNCTION_MAP.md')}"><span class="feature-number">03 / CODE MAPPING</span><h3>What each routine means</h3><p>Address-based correlations, field layouts and connections to the Rust code.</p><span>Browse identified functions →</span></a>
+<a class="feature" href="{slug('analysis/race_logic_map.md')}"><span class="feature-number">04 / ORIGINAL BEHAVIOR</span><h3>Follow the game logic</h3><p>Input paths, race state and structure offsets, checked against captures of the original.</p><span>Read the research →</span></a></div></section>
+<section class="method"><div><span class="eyebrow">Verification matters</span><h2>A mapping is a claim.<br>A measurement is evidence.</h2></div><p>Every translated function is checked against a reference interpreter; builds are accepted only after a race is driven to the results screen with interpreter counters at zero. Inferred labels are kept distinct from verified behavior.</p></section>
 <div class="notice">This site publishes reviewed documentation snapshots. Changes become live after documentation is synced and pushed to the repository; it does not read the developer's PC automatically.</div>'''
     (OUT / 'index.html').write_text(frame('Overview', overview), encoding='utf-8')
     explorer = '''<div class="eyebrow">Code inventory / Search & inspect</div><h1>Function explorer</h1>

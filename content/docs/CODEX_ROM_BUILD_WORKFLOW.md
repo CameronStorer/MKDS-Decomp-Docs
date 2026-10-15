@@ -7,9 +7,9 @@ their own ROM locally. This describes engineering boundaries, not legal clearanc
 
 ### Recompiler status (2026-10-10)
 
-`rom_builder/` is currently a ROM validator, TUI, and staging launcher; its `--build` action still
-compiles the frozen `game/` reference port. It is not yet the promised ROM-to-game recompiler.
-`recomp/build.rs` is a separate spike that lifts a capped ARM subset from metadata-selected ARM9
+`1_build_tool/` is currently a ROM validator, TUI, and staging launcher; its `--build` action still
+compiles the frozen `3_hand_port/game/` reference port. It is not yet the promised ROM-to-game recompiler.
+`2_native_game/build.rs` is a separate spike that lifts a capped ARM subset from metadata-selected ARM9
 main/autoload/overlay images and is not yet linked into a runnable game. User ROM loading exposes decompressed ARM9
 main/autoload sections and expanded ARM9 overlays through
 `mkds_builder::extract::{arm9_sections, arm9_overlays}`, plus zero-copy NitroFS access through
@@ -19,27 +19,27 @@ generated Rust into the game runtime and boot through replacement DS services. C
 validation still accepts AMCE revision 0 only; other regions/revisions need their own address
 metadata before they can be safely lifted.
 
-### Rust builder (rom_builder/, 2026-10-10)
+### Rust builder (1_build_tool/, 2026-10-10)
 
-`rom_builder/` (crate `mkds_builder`) is the Rust port of `tools/rom_builder.py` with a ratatui TUI.
-No Python needed. Run `cargo run --release --manifest-path rom_builder/Cargo.toml` for the TUI, or
+`1_build_tool/` (crate `mkds_builder`) is the Rust port of `5_tools/rom_builder.py` with a ratatui TUI.
+No Python needed. Run `cargo run --release --manifest-path 1_build_tool/Cargo.toml` for the TUI, or
 `mkds_builder ROM --inspect|--build|--run [--out DIR] [--source CHECKOUT] [--allow-unverified] [--offline] [--course NAME] [--json]`.
 The bundle contains the game exe, `manifest.json` and `play.exe` (a copy of the builder that re-checks the ROM hash, then launches).
-Tests: `cargo test --manifest-path rom_builder/Cargo.toml`.
+Tests: `cargo test --manifest-path 1_build_tool/Cargo.toml`.
 
 ### First local builder (2026-10-10)
 
 Python 3.11+ and Rust/Cargo are required. Start the plain terminal menu:
 
 ```powershell
-python tools/rom_builder.py
+python 5_tools/rom_builder.py
 ```
 
 Or use explicit commands from the repository root:
 
 ```powershell
-python tools/rom_builder.py "C:\path\owned-copy.nds" --inspect
-python tools/rom_builder.py "C:\path\owned-copy.nds" --build --out "C:\path\My MKDS Build"
+python 5_tools/rom_builder.py "C:\path\owned-copy.nds" --inspect
+python 5_tools/rom_builder.py "C:\path\owned-copy.nds" --build --out "C:\path\My MKDS Build"
 python "C:\path\My MKDS Build\play.py"
 ```
 
@@ -70,20 +70,20 @@ it does not generate arbitrary game source from an NDS file. Existing ROM-derive
 tables and incomplete gameplay still need the separate fidelity/release work
 described below. The tool builds the current checkout, including local changes.
 
-Builder checks: `python -m unittest discover -s tools/tests -p test_rom_builder.py -v`.
+Builder checks: `python -m unittest discover -s 5_tools/tests -p test_rom_builder.py -v`.
 
-`vm_model/src/assets.rs` already reads the NDS filesystem, LZ10-compressed CARC
-archives and NARC entries directly. `game/src/main.rs` accepts `--rom PATH` or
+`3_hand_port/vm_model/src/assets.rs` already reads the NDS filesystem, LZ10-compressed CARC
+archives and NARC entries directly. `3_hand_port/game/src/main.rs` accepts `--rom PATH` or
 `MKDS_ROM`; extracted assets do not need to be distributed for that path.
 
-`tools/nds_extract.py ROM --out DIRECTORY` produces decompressed code sections,
+`5_tools/nds_extract.py ROM --out DIRECTORY` produces decompressed code sections,
 overlay manifests and IDA load plans. It requires ndspy. `asset_organizer.py`
 organizes an existing dump; it does not itself perform ROM extraction.
 
 Example development run, from the repository root:
 
 ```powershell
-cargo run --release --manifest-path game/Cargo.toml -- --rom "C:\path\owned-copy.nds"
+cargo run --release --manifest-path 3_hand_port/game/Cargo.toml -- --rom "C:\path\owned-copy.nds"
 ```
 
 This is a native Rust executable reading original data. It does not currently
@@ -120,14 +120,14 @@ confidence, Rust counterpart and verification evidence. Unknown routines remain
 explicitly unknown. Separate game logic from SDK, hardware, networking and debug
 code so that documenting everything does not imply porting every routine.
 
-Claude's current semantic catalog is `docs/FUNCTION_MAP.md`; the animation
-supplement is `analysis/CODEX_ANIMATION_MAP.md`. The former is generated from
-source comments and `docs/function_notes.md` and currently targets plan0. A
+Claude's current semantic catalog is `4_docs/FUNCTION_MAP.md`; the animation
+supplement is `6_data/analysis/CODEX_ANIMATION_MAP.md`. The former is generated from
+source comments and `4_docs/function_notes.md` and currently targets plan0. A
 future catalog migration should reconcile segment identities against plan2.
 
 ### Native build flow (2026-10-14, current implementation)
 `mkds_builder <your.nds> --build --out <empty dir>` generates Rust from your ROM (`mkds_gen`), links it to the native
-host (`recomp/native`), compiles it with locked dependencies and stages `game`, `play`, `manifest.json`,
+host (`2_native_game/native`), compiles it with locked dependencies and stages `game`, `play`, `manifest.json`,
 `generation.json` and `coverage.csv`. `--run` also launches it; extra runtime options go after `play`
 (`--headless --instructions N`, `--frames N`, `--mute`, `--capture DIR`, `--input-script CSV`). Incomplete coverage
 fails the build unless `--allow-incomplete`; `--keep-generated` keeps the generated source. The frozen hand-written port is
